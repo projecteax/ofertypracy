@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npm install --prefix tracker/app",
+  "buildCommand": "npm run build --prefix tracker/app",
+  "outputDirectory": "tracker/app/dist",
+  "framework": "vite",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}

@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "npm install --prefix tracker/app && npm run build --prefix tracker/app",
+    "dev": "npm run dev --prefix tracker/app"
+  }
+}

@@ -7,8 +7,17 @@ Tracker aktywnych ofert **People Ops / HRBP / HR Ops / P&C** dopasowanych do pro
 ```bash
 cd tracker/app
 npm install
+cp .env.example .env   # uzupełnij Supabase URL + anon key
 npm run dev
 ```
+
+## Vercel
+
+Root Directory w projekcie Vercel: **`tracker/app`** (albo root repo z `vercel.json`).
+
+Environment variables:
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
 
 ## Logowanie
 

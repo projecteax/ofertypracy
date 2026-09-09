@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LinkedIn copy + Reference letters - Marta Tomaszewska</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,650&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1a2332;
+      --soft: #3d4a5c;
+      --muted: #6b7a8f;
+      --line: #d5dde8;
+      --accent: #0a66c2;
+      --wash: #eef3f8;
+      --card: #fff;
+      --ref-accent: #0a4f44;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Figtree", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(165deg, #e8eef4, #f4f1ea 50%, #e8f0ec);
+      padding: 32px 16px 48px;
+      line-height: 1.45;
+    }
+
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      margin: 0 0 6px;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.75rem;
+      font-weight: 650;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--soft);
+      font-size: 0.95rem;
+    }
+
+    .note {
+      margin: 14px 0 0;
+      padding: 12px 14px;
+      background: var(--wash);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.88rem;
+      color: var(--soft);
+    }
+
+    .block {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px 22px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 30px rgba(26, 35, 50, 0.06);
+    }
+
+    .block h2 {
+      margin: 0 0 4px;
+      font-size: 1.1rem;
+      color: var(--accent);
+    }
+
+    .block .role {
+      margin: 18px 0 0;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .block .role:first-of-type {
+      margin-top: 12px;
+    }
+
+    .block h3 {
+      margin: 0 0 2px;
+      font-size: 1rem;
+    }
+
+    .dates {
+      margin: 0 0 10px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .meta {
+      margin: 0 0 10px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1.15em;
+    }
+
+    li {
+      margin-bottom: 5px;
+      color: var(--soft);
+      font-size: 0.92rem;
+    }
+
+    .about p {
+      margin: 0;
+      color: var(--soft);
+      font-size: 0.95rem;
+    }
+
+    .divider {
+      margin: 40px 0 24px;
+      padding-top: 28px;
+      border-top: 2px solid var(--line);
+    }
+
+    .divider h1 {
+      margin: 0 0 8px;
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 650;
+      color: var(--ref-accent);
+    }
+
+    .divider p {
+      margin: 0;
+      color: var(--soft);
+      font-size: 0.9rem;
+    }
+
+    .letter {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 28px 30px 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(26, 35, 50, 0.06);
+      break-inside: avoid;
+    }
+
+    .letter__label {
+      margin: 0 0 18px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ref-accent);
+    }
+
+    .letter__date {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .letter p {
+      margin: 0 0 12px;
+      color: var(--soft);
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    .letter p:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .letter__sign {
+      margin-top: 28px;
+      padding-top: 8px;
+    }
+
+    .letter__sign p {
+      margin: 0 0 4px;
+      color: var(--ink);
+      font-size: 0.92rem;
+    }
+
+    .letter__sign .sig-line {
+      margin: 36px 0 10px;
+      width: 220px;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .letter__sign .name {
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .copy-hint {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    @media print {
+      body {
+        background: none;
+        padding: 0;
+      }
+
+      .wrap {
+        max-width: none;
+      }
+
+      .no-print {
+        display: none;
+      }
+
+      .letter {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        margin-bottom: 16mm;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="no-print">
+      <h1>LinkedIn - copy &amp; paste</h1>
+      <p>Marta Tomaszewska · public version (no sensitive headcounts / volumes)</p>
+      <p class="note">
+        Swiadomie bez liczb typu 200+, 14, 50, 70, 75, # polis.
+        Detale zostaja w CV / na rozmowie. Zaznacz tekst w bloku i skopiuj.
+        Na dole: listy referencyjne gotowe do podpisu.
+      </p>
+    </header>
+
+    <section class="block about no-print">
+      <h2>About</h2>
+      <p>Global HR &amp; Operations Specialist supporting multi-country tech teams. Experience across people operations on Deel, expense tracking and spend planning, financial reporting into APMC, Polish payroll and subsidiary reporting, corporate insurance, office operations, recruitment coordination, and post-acquisition integration. Board Member of Laminar Global Poland (APMC subsidiary), with signatory responsibility for Polish legal and administrative matters. Background in software-house business support and startup HR build-out.</p>
+    </section>
+
+    <section class="block no-print">
+      <h2>A Parent Media Co. Inc. (APMC)</h2>
+
+      <div class="role">
+        <h3>Global HR and Operations Specialist</h3>
+        <p class="dates">Oct 2025 - Present</p>
+        <ul>
+          <li>Primary HR contact for daily people operations across a multi-country team on Deel</li>
+          <li>Own company-wide time-off policy design and ongoing leave administration</li>
+          <li>Support contracts, offboarding and HR data hygiene</li>
+          <li>Track and plan company expenses and spend; run Polish payroll and deliver financial reporting into APMC for the Polish subsidiary</li>
+          <li>Manage global insurance programmes and adjust cover when client / vendor agreements change</li>
+          <li>Oversee office leasing and workplace operations in Poland and Spain</li>
+          <li>Board Member of Laminar Global Poland: signatory for Polish legal documents and company representative before local authorities</li>
+          <li>Support recruitment for group hires (intake, coordination, offer paperwork, onboarding handoff)</li>
+        </ul>
+      </div>
+
+      <div class="role">
+        <h3>Business &amp; Global Operations Support</h3>
+        <p class="dates">Jan 2024 - Oct 2025</p>
+        <ul>
+          <li>Supported post-acquisition people-ops integration of Laminar Global into APMC</li>
+          <li>Helped stand up Deel as the system of record for multi-country employment, expense tracking and payment workflows</li>
+          <li>Stabilized HR documentation and payment workflows across the expanded country footprint</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block no-print">
+      <h2>Laminar Global / Laminar Global Poland</h2>
+      <p class="meta">APMC subsidiary since 2024 · employing entity</p>
+
+      <div class="role">
+        <h3>HR Specialist &amp; Business Support</h3>
+        <p class="dates">Apr 2022 - Present</p>
+        <ul>
+          <li>Built HR and business-support processes from venture spin-out through acquisition</li>
+          <li>Employment via Laminar Global Poland as APMC subsidiary</li>
+          <li>Coordinated founder and corporate agreements with external counsel (Osborne Clarke)</li>
+          <li>Owned liaison with external tax and accounting advisors (financial statements, transfer pricing, PIT and other statutory filings)</li>
+          <li>Maintained company IT asset register and check-in / check-out control</li>
+          <li>Ran recruitment in partnership with an external recruiting agency (briefs, coordination, contracts, onboarding)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block no-print">
+      <h2>ARC Software</h2>
+      <p class="meta">Full-time earlier; now limited subcontract support</p>
+
+      <div class="role">
+        <h3>Business Support Specialist</h3>
+        <p class="dates">Mar 2022 - Present</p>
+        <ul>
+          <li>Administered contractor agreements for developers, QA and project managers</li>
+          <li>Legal and finance liaison with international clients and external accounting</li>
+          <li>Supported clients including Add Secure (Sweden), Medcase (Israel) and Polish accounts - invoicing, year-end filings and commercial documentation</li>
+          <li>Supported subsidiary setup documentation (ARC DermoBook, Diagno6 PSA)</li>
+          <li>Participated in recruitment for engineering and delivery roles (coordination, contracts, starter documentation)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block no-print">
+      <h2>Buczynski Adwokacka S.K.A.</h2>
+
+      <div class="role">
+        <h3>Office Manager</h3>
+        <p class="dates">Jul 2020 - Feb 2022</p>
+        <ul>
+          <li>Ran day-to-day law-firm operations: calendars, correspondence, archiving and core HR administration</li>
+          <li>Liaised with courts and public administration in Poland and abroad</li>
+          <li>Supported residence and employment legalization processes</li>
+          <li>Co-created the firm's visual identity system</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block no-print">
+      <h2>REGULATOR Agencja Eventowa</h2>
+
+      <div class="role">
+        <h3>Event Manager (Freelance)</h3>
+        <p class="dates">Apr 2019 - Sep 2021</p>
+        <ul>
+          <li>Delivered public events within fixed budgets - concept, vendors, logistics and on-site execution</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== REFERENCE LETTERS ========== -->
+    <div class="divider">
+      <h1>Reference letters</h1>
+      <p class="no-print">Gotowe do podpisu. Mozesz wydrukowac tylko te sekcje (Print) albo skopiowac kazdy list osobno. Uzupelnij date przed wyslaniem.</p>
+    </div>
+
+    <article class="letter">
+      <p class="letter__label">Reference 1 · Direct manager</p>
+      <p class="letter__date">Date: ____________________</p>
+      <p>To whom it may concern,</p>
+      <p>
+        I am pleased to provide this reference for Marta Tomaszewska, who has worked under my supervision
+        at A Parent Media Co. Inc. (APMC) in people operations and global HR support.
+      </p>
+      <p>
+        In her role, Marta has been a reliable point of contact for employees and a practical partner
+        on day-to-day people operations across our international footprint. She has contributed to
+        Deel-based HR processes, leave policy administration, expense tracking and spend planning,
+        financial reporting into APMC, Polish payroll and subsidiary reporting,
+        insurance and office-related operations, as well as recruitment support. She also holds board
+        responsibilities for Laminar Global Poland, including signatory duties for local legal and
+        administrative matters.
+      </p>
+      <p>
+        Marta is organised, discreet with sensitive information, and easy to work with under pressure.
+        I am confident she would be a strong addition to a people operations or HR team, and I am happy
+        to recommend her.
+      </p>
+      <p>Please feel free to contact me if you need any further information.</p>
+      <div class="letter__sign">
+        <div class="sig-line" aria-hidden="true"></div>
+        <p class="name">Leina Nhan</p>
+        <p>Head of People</p>
+        <p>A Parent Media Co. Inc. (APMC)</p>
+        <p>Email / phone: ____________________</p>
+      </div>
+    </article>
+
+    <article class="letter">
+      <p class="letter__label">Reference 2 · Colleague / People Business Partner</p>
+      <p class="letter__date">Date: ____________________</p>
+      <p>To whom it may concern,</p>
+      <p>
+        I am writing to recommend Marta Tomaszewska, with whom I have worked closely at APMC
+        in a People Business Partner capacity.
+      </p>
+      <p>
+        Marta has been a dependable collaborator on people operations topics, including employee
+        support, documentation, Deel-related workflows, and coordination between HR, operations and
+        other stakeholders. She communicates clearly, follows through on commitments, and handles
+        cross-border processes with care and common sense.
+      </p>
+      <p>
+        I have found her professional, collaborative and solutions-oriented. I would gladly work
+        with her again and am comfortable recommending her for HR / people operations roles.
+      </p>
+      <p>If useful, I am available to provide additional context.</p>
+      <div class="letter__sign">
+        <div class="sig-line" aria-hidden="true"></div>
+        <p class="name">Maria Bircanin</p>
+        <p>People Business Partner</p>
+        <p>A Parent Media Co. Inc. (APMC)</p>
+        <p>Email / phone: ____________________</p>
+      </div>
+    </article>
+
+    <article class="letter">
+      <p class="letter__label">Reference 3 · Former Director, Laminar Global Poland</p>
+      <p class="letter__date">Date: ____________________</p>
+      <p>To whom it may concern,</p>
+      <p>
+        I am writing as former Director of Laminar Global Poland to provide a reference for
+        Marta Tomaszewska.
+      </p>
+      <p>
+        During my time in that role, Marta played a central part in HR and business support for
+        Laminar, including during the company's development and its relationship with APMC as
+        parent organisation. She supported people operations, recruitment coordination, tax and
+        accounting liaison, company documentation and, as a Board Member of Laminar Global Poland,
+        representation before Polish authorities and sign-off on local legal documents.
+      </p>
+      <p>
+        I valued her ownership, reliability and ability to keep operational and compliance topics
+        moving without constant oversight. I recommend her without reservation for roles in HR,
+        people operations or business support.
+      </p>
+      <p>Please contact me should you require any further details.</p>
+      <div class="letter__sign">
+        <div class="sig-line" aria-hidden="true"></div>
+        <p class="name">Adrian Kasprzak</p>
+        <p>Former Director</p>
+        <p>Laminar Global Poland</p>
+        <p>Email / phone: ____________________</p>
+      </div>
+    </article>
+
+    <article class="letter">
+      <p class="letter__label">Reference 4 · COO, ARC Software</p>
+      <p class="letter__date">Date: ____________________</p>
+      <p>To whom it may concern,</p>
+      <p>
+        I am pleased to recommend Marta Tomaszewska, who has worked with ARC Software in business
+        support, including contractor and client-facing operational matters.
+      </p>
+      <p>
+        Marta supported administration of contractor agreements, coordination with legal and finance
+        stakeholders, invoicing and year-end related documentation for international clients, and
+        participation in recruitment processes for delivery roles. She also assisted with documentation
+        connected to subsidiary setup. She continues to provide limited subcontract support where needed.
+      </p>
+      <p>
+        She is practical, trustworthy and able to manage several operational threads at once.
+        I am happy to recommend her for similar business support, operations or HR coordination roles.
+      </p>
+      <p>I am available if further information would be helpful.</p>
+      <div class="letter__sign">
+        <div class="sig-line" aria-hidden="true"></div>
+        <p class="name">Maciej Kosciuk</p>
+        <p>COO</p>
+        <p>ARC Software</p>
+        <p>Email / phone: ____________________</p>
+      </div>
+    </article>
+
+    <p class="copy-hint no-print">Plik: linkedin.html · CV z metrykami: index.html</p>
+  </div>
+</body>
+</html>

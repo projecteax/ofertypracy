@@ -1,0 +1,480 @@
+/* Marta Tomaszewska - CV
+   2x A4 sheets · LinkedIn-style company -> roles · print-safe */
+
+:root {
+  --ink: #1a2332;
+  --ink-soft: #3d4a5c;
+  --muted: #6b7a8f;
+  --line: #d5dde8;
+  --paper: #f7f5f1;
+  --card: #ffffff;
+  --accent: #0e6b5c;
+  --accent-deep: #0a4f44;
+  --wash: #e8f2ef;
+  --photo-ring: #c5d9d3;
+  --shadow: 0 18px 50px rgba(26, 35, 50, 0.08);
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", "Segoe UI", sans-serif;
+  --sheet-pad-y: 12mm;
+  --sheet-pad-x: 14mm;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 24px 0 40px;
+  font-family: var(--font-body);
+  font-size: 10.25pt;
+  line-height: 1.42;
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #dceee9 0%, transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, #e8e4dc 0%, transparent 50%),
+    linear-gradient(165deg, #ece8e1 0%, var(--paper) 45%, #e4ebe8 100%);
+}
+
+/* Each .sheet = one A4 page */
+.sheet {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 28px;
+  padding: 12mm 14mm 10mm;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(26, 35, 50, 0.06);
+  position: relative;
+}
+
+.sheet::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--accent-deep), var(--accent) 45%, #7a9e72);
+}
+
+/* —— Header —— */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px 20px;
+  align-items: start;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 14px;
+}
+
+.eyebrow {
+  margin: 0 0 5px;
+  font-size: 7.5pt;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 24pt;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--ink);
+}
+
+.headline {
+  margin: 4px 0 10px;
+  font-size: 11pt;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.summary {
+  margin: 0 0 12px;
+  max-width: 48em;
+  color: var(--ink-soft);
+  font-size: 9.25pt;
+  line-height: 1.5;
+}
+
+.contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 8.25pt;
+  color: var(--muted);
+}
+
+.contact a {
+  color: var(--accent-deep);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.contact a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.hero__photo {
+  margin: 2px 0 0;
+  flex-shrink: 0;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--card);
+  background: var(--card);
+  box-shadow:
+    0 0 0 2px #d0d5dc,
+    0 8px 20px rgba(26, 35, 50, 0.12);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  isolation: isolate;
+}
+
+.hero__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 15%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+/* —— Sections —— */
+.section {
+  margin-bottom: 14px;
+}
+
+.section h2 {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-size: 10pt;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+  padding-bottom: 3px;
+  border-bottom: 2px solid var(--wash);
+}
+
+.company {
+  margin-bottom: 14px;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.company--last {
+  margin-bottom: 0;
+}
+
+.company__head {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.company__head--edu {
+  grid-template-columns: 32px 1fr auto;
+  align-items: start;
+  margin-bottom: 10px;
+}
+
+.company__logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 2px;
+}
+
+.company__head--edu .company__logo {
+  width: 32px;
+  height: 32px;
+}
+
+.company__logo--fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--wash);
+  color: var(--accent-deep);
+  font-weight: 700;
+  font-size: 11pt;
+}
+
+.company__titles h3 {
+  margin: 0;
+  font-size: 10.5pt;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.company__meta {
+  margin: 2px 0 0;
+  font-size: 8pt;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.position {
+  margin: 0 0 8px 46px;
+  padding-left: 12px;
+  border-left: 2px solid var(--wash);
+}
+
+.position:last-child {
+  margin-bottom: 0;
+}
+
+.position__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 3px;
+}
+
+.position h4 {
+  margin: 0;
+  font-size: 9.75pt;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.org {
+  margin: 2px 0 0;
+  font-size: 8.75pt;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.muted {
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.dates {
+  margin: 0;
+  flex-shrink: 0;
+  font-size: 8pt;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.position ul {
+  margin: 2px 0 0;
+  padding: 0 0 0 1em;
+}
+
+.position li {
+  margin-bottom: 2px;
+  color: var(--ink-soft);
+  font-size: 8.75pt;
+  line-height: 1.38;
+}
+
+.position li strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.edu {
+  margin-bottom: 8px;
+}
+
+.edu:last-child {
+  margin-bottom: 0;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 18px;
+  margin-bottom: 6px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tags li {
+  padding: 3px 8px;
+  font-size: 7.75pt;
+  font-weight: 600;
+  color: var(--accent-deep);
+  background: var(--wash);
+  border: 1px solid #d0e4de;
+  border-radius: 999px;
+}
+
+.tools-grid {
+  display: grid;
+  gap: 4px;
+}
+
+.tools-grid p {
+  margin: 0;
+  font-size: 8.75pt;
+  color: var(--ink-soft);
+}
+
+.label {
+  display: inline-block;
+  min-width: 5.2em;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+@media screen and (max-width: 860px) {
+  body {
+    background: var(--paper);
+    padding: 0;
+  }
+
+  .sheet {
+    width: 100%;
+    min-height: auto;
+    margin: 0 0 16px;
+    padding: 28px 20px 32px;
+    border: none;
+    box-shadow: none;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .hero__photo {
+    order: -1;
+    width: 96px;
+    height: 96px;
+  }
+
+  .hero__photo img {
+    width: 100%;
+    height: 100%;
+  }
+
+  h1 {
+    font-size: 22pt;
+  }
+
+  .position {
+    margin-left: 0;
+  }
+
+  .split {
+    grid-template-columns: 1fr;
+  }
+
+  .company__head--edu {
+    grid-template-columns: 32px 1fr;
+  }
+
+  .company__head--edu .dates {
+    grid-column: 2;
+  }
+
+  .dates {
+    white-space: normal;
+  }
+}
+
+/* —— Print: hard 2-page A4 —— */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  html,
+  body {
+    width: 210mm;
+    margin: 0;
+    padding: 0;
+    background: none;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .sheet {
+    width: 210mm;
+    height: 297mm;
+    min-height: 297mm;
+    max-height: 297mm;
+    margin: 0;
+    padding: 11mm 13mm 10mm;
+    border: none;
+    box-shadow: none;
+    overflow: hidden;
+    page-break-after: always;
+    break-after: page;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .sheet:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  .contact a {
+    color: var(--ink-soft);
+    border: none;
+  }
+
+  /* Keep circular photo clean in PDF / print engines */
+  .hero__photo {
+    box-shadow: 0 0 0 1.5px #d0d5dc;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .hero__photo img {
+    box-shadow: none;
+  }
+
+  a[href^="mailto:"],
+  a[href^="tel:"],
+  a[href*="linkedin"] {
+    text-decoration: none;
+  }
+}

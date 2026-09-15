@@ -172,13 +172,27 @@ button.secondary {
 
 .quick {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
   margin-top: 8px;
+  align-items: center;
 }
 
 .quick button {
   padding: 6px 10px;
   font-size: 0.82rem;
+}
+
+.quick .status-select {
+  width: auto;
+  min-width: 150px;
+  margin: 0;
+}
+
+.edit-app {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
 }
 
 .app-meta {

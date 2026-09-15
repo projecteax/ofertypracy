@@ -74,6 +74,7 @@ let state = {
   status: 'all',
   appStatus: 'all',
   openId: null,
+  editAppId: null,
   saving: null,
   error: '',
   warning: '',
@@ -505,6 +506,7 @@ function renderAppsTab() {
     <div class="list">
       ${rows.map((a) => {
         const saving = state.saving === a.id
+        const editing = state.editAppId === a.id
         return `
           <article class="row status-${escapeHtml(a.status === 'applied' ? 'contacted' : a.status)}" data-app-id="${a.id}">
             <div class="row-main">
@@ -522,16 +524,68 @@ function renderAppsTab() {
             <div class="app-meta">
               <span><strong>Kontakt:</strong> ${escapeHtml(a.contact_email || '—')}</span>
               <span><strong>CV jako:</strong> ${escapeHtml(a.applicant_name)} · ${escapeHtml(a.applicant_phone)} · ${escapeHtml(a.applicant_email)}</span>
+              ${a.note ? `<span><strong>Notatka:</strong> ${escapeHtml(a.note)}</span>` : ''}
             </div>
-            <div class="row-actions">
-              <select class="status-select" ${saving ? 'disabled' : ''}>
+            <div class="quick">
+              <select class="status-select" ${saving || editing ? 'disabled' : ''}>
                 ${APP_STATUS_OPTIONS.map(([v, l]) => `<option value="${v}" ${a.status === v ? 'selected' : ''}>${l}</option>`).join('')}
               </select>
-              <input class="comment" placeholder="Notatka / email..." value="${escapeHtml(a.note || '')}" ${saving ? 'disabled' : ''} />
-              <input class="contact" placeholder="Email kontaktu" value="${escapeHtml(a.contact_email || '')}" ${saving ? 'disabled' : ''} />
-              <button class="save" ${saving ? 'disabled' : ''}>${saving ? '…' : 'Zapisz'}</button>
+              <button type="button" class="secondary toggle-edit">${editing ? 'Anuluj' : 'Edytuj'}</button>
               <button type="button" class="secondary delete" ${saving ? 'disabled' : ''}>Usuń</button>
             </div>
+            ${editing ? `
+              <form class="edit-app add-form" data-edit-id="${a.id}">
+                <label>Link do oferty / aplikacji *</label>
+                <input name="url" type="url" required value="${escapeHtml(a.url || '')}" ${saving ? 'disabled' : ''} />
+                <div class="grid-2">
+                  <div>
+                    <label>Email rekrutera / kontakt</label>
+                    <input name="contact_email" type="email" value="${escapeHtml(a.contact_email || '')}" ${saving ? 'disabled' : ''} />
+                  </div>
+                  <div>
+                    <label>Data aplikacji</label>
+                    <input name="applied_at" type="date" value="${escapeHtml(a.applied_at || '')}" ${saving ? 'disabled' : ''} />
+                  </div>
+                </div>
+                <div class="grid-2">
+                  <div>
+                    <label>Stanowisko</label>
+                    <input name="title" value="${escapeHtml(a.title || '')}" ${saving ? 'disabled' : ''} />
+                  </div>
+                  <div>
+                    <label>Firma</label>
+                    <input name="company" value="${escapeHtml(a.company || '')}" ${saving ? 'disabled' : ''} />
+                  </div>
+                </div>
+                <div class="grid-3">
+                  <div>
+                    <label>Imię i nazwisko</label>
+                    <input name="applicant_name" value="${escapeHtml(a.applicant_name || MARTA.name)}" ${saving ? 'disabled' : ''} />
+                  </div>
+                  <div>
+                    <label>Telefon</label>
+                    <input name="applicant_phone" value="${escapeHtml(a.applicant_phone || MARTA.phone)}" ${saving ? 'disabled' : ''} />
+                  </div>
+                  <div>
+                    <label>Twój email</label>
+                    <input name="applicant_email" type="email" value="${escapeHtml(a.applicant_email || MARTA.email)}" ${saving ? 'disabled' : ''} />
+                  </div>
+                </div>
+                <div class="grid-2">
+                  <div>
+                    <label>Status</label>
+                    <select name="status" ${saving ? 'disabled' : ''}>
+                      ${APP_STATUS_OPTIONS.map(([v, l]) => `<option value="${v}" ${a.status === v ? 'selected' : ''}>${l}</option>`).join('')}
+                    </select>
+                  </div>
+                  <div>
+                    <label>Notatka</label>
+                    <input name="note" value="${escapeHtml(a.note || '')}" ${saving ? 'disabled' : ''} />
+                  </div>
+                </div>
+                <button type="submit" ${saving ? 'disabled' : ''}>${saving ? 'Zapisywanie…' : 'Zapisz zmiany'}</button>
+              </form>
+            ` : ''}
           </article>
         `
       }).join('') || '<p class="meta">Brak aplikacji — dodaj ręcznie albo kliknij „Zaaplikowałam” przy ofercie.</p>'}
@@ -637,30 +691,75 @@ function renderApp() {
 
   document.querySelectorAll('.row[data-app-id]').forEach((row) => {
     const id = row.dataset.appId
-    row.querySelector('.save').onclick = async () => {
-      const patch = {
-        status: row.querySelector('.status-select').value,
-        note: row.querySelector('.comment').value,
-        contact_email: row.querySelector('.contact').value,
-      }
-      state.saving = id
-      state.error = ''
+
+    row.querySelector('.toggle-edit').onclick = () => {
+      state.editAppId = state.editAppId === id ? null : id
       renderApp()
-      try {
-        await updateApplication(id, patch)
-        state.saving = null
+    }
+
+    const statusSelect = row.querySelector(':scope > .quick > .status-select')
+    if (statusSelect) {
+      statusSelect.onchange = async () => {
+        const status = statusSelect.value
+        state.saving = id
+        state.error = ''
         renderApp()
-      } catch (err) {
-        state.saving = null
-        state.error = err.message || String(err)
-        renderApp()
+        try {
+          await updateApplication(id, { status })
+          state.saving = null
+          renderApp()
+        } catch (err) {
+          state.saving = null
+          state.error = err.message || String(err)
+          renderApp()
+        }
       }
     }
+
+    const form = row.querySelector('.edit-app')
+    if (form) {
+      form.onsubmit = async (e) => {
+        e.preventDefault()
+        const fd = new FormData(form)
+        const patch = {
+          url: String(fd.get('url') || '').trim(),
+          contact_email: String(fd.get('contact_email') || '').trim(),
+          applied_at: String(fd.get('applied_at') || '').trim() || null,
+          title: String(fd.get('title') || '').trim(),
+          company: String(fd.get('company') || '').trim(),
+          applicant_name: String(fd.get('applicant_name') || '').trim() || MARTA.name,
+          applicant_phone: String(fd.get('applicant_phone') || '').trim() || MARTA.phone,
+          applicant_email: String(fd.get('applicant_email') || '').trim() || MARTA.email,
+          status: String(fd.get('status') || 'applied'),
+          note: String(fd.get('note') || '').trim(),
+        }
+        if (!patch.url) {
+          state.error = 'Link do oferty jest wymagany.'
+          renderApp()
+          return
+        }
+        state.saving = id
+        state.error = ''
+        renderApp()
+        try {
+          await updateApplication(id, patch)
+          state.saving = null
+          state.editAppId = null
+          renderApp()
+        } catch (err) {
+          state.saving = null
+          state.error = err.message || String(err)
+          renderApp()
+        }
+      }
+    }
+
     row.querySelector('.delete').onclick = async () => {
       if (!confirm('Usunąć tę aplikację z listy?')) return
       state.saving = id
       try {
         await deleteApplication(id)
+        if (state.editAppId === id) state.editAppId = null
         state.saving = null
         renderApp()
       } catch (err) {

@@ -153,6 +153,26 @@ async function loadApplications() {
 async function loadData() {
   await loadJobs()
   await Promise.all([loadOutreach(), loadApplications()])
+  // Keep Oferty in sync with Moje aplikacje (source of truth for applied statuses)
+  for (const a of state.applications) {
+    if (!a.job_id) continue
+    const mapped =
+      a.status === 'applied' ? 'contacted'
+        : a.status === 'replied' ? 'replied'
+          : a.status === 'interview' ? 'interview'
+            : a.status === 'rejected' ? 'rejected'
+              : a.status === 'hired' ? 'hired'
+                : null
+    if (!mapped) continue
+    const existing = state.outreach[a.job_id]
+    state.outreach[a.job_id] = {
+      ...(existing || {}),
+      job_id: a.job_id,
+      status: mapped,
+      comment: a.note || existing?.comment || '',
+      contacted_at: a.applied_at || existing?.contacted_at || null,
+    }
+  }
 }
 
 function filteredJobs() {

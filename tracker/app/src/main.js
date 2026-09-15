@@ -658,16 +658,12 @@ function renderApp() {
           status: 'contacted',
           comment: row.querySelector('.comment').value,
         })
-        state.tab = 'apps'
-        renderApp()
       }
       row.querySelector('.quick-rejected').onclick = async () => {
         await upsertOutreach(id, {
           status: 'rejected',
           comment: row.querySelector('.comment').value,
         })
-        state.tab = 'apps'
-        renderApp()
       }
       const resetBtn = row.querySelector('.quick-reset')
       if (resetBtn) {

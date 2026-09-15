@@ -36,7 +36,7 @@ const MARTA = {
 }
 
 const STATUS_OPTIONS = [
-  ['todo', 'Do zrobienia'],
+  ['todo', 'Nowe'],
   ['contacted', 'Zaaplikowane'],
   ['replied', 'Odpowiedź'],
   ['interview', 'Rozmowa'],
@@ -45,6 +45,8 @@ const STATUS_OPTIONS = [
   ['skip', 'Skip'],
 ]
 
+const STATUS_LABELS = Object.fromEntries(STATUS_OPTIONS)
+
 const APP_STATUS_OPTIONS = [
   ['applied', 'Zaaplikowane'],
   ['replied', 'Odpowiedź'],
@@ -52,6 +54,8 @@ const APP_STATUS_OPTIONS = [
   ['rejected', 'Odrzucone'],
   ['hired', 'Hired'],
 ]
+
+const APP_STATUS_LABELS = Object.fromEntries(APP_STATUS_OPTIONS)
 
 const APP_FROM_OUTREACH = {
   contacted: 'applied',
@@ -152,18 +156,25 @@ async function loadData() {
 }
 
 function filteredJobs() {
-  return state.jobs.filter((j) => {
-    const o = state.outreach[j.id]
-    const st = o?.status || 'todo'
-    if (state.fit !== 'all' && String(j.fit_score) !== state.fit) return false
-    if (state.source !== 'all' && !(j.source || '').includes(state.source)) return false
-    if (state.status !== 'all' && st !== state.status) return false
-    if (state.q) {
-      const hay = `${j.title} ${j.company} ${j.location} ${j.fit_reason} ${j.description} ${j.source}`.toLowerCase()
-      if (!hay.includes(state.q.toLowerCase())) return false
-    }
-    return true
-  })
+  const rank = { todo: 0, contacted: 2, replied: 3, interview: 4, hired: 5, rejected: 6, skip: 7 }
+  return state.jobs
+    .filter((j) => {
+      const o = state.outreach[j.id]
+      const st = o?.status || 'todo'
+      if (state.fit !== 'all' && String(j.fit_score) !== state.fit) return false
+      if (state.source !== 'all' && !(j.source || '').includes(state.source)) return false
+      if (state.status !== 'all' && st !== state.status) return false
+      if (state.q) {
+        const hay = `${j.title} ${j.company} ${j.location} ${j.fit_reason} ${j.description} ${j.source}`.toLowerCase()
+        if (!hay.includes(state.q.toLowerCase())) return false
+      }
+      return true
+    })
+    .sort((a, b) => {
+      const sa = state.outreach[a.id]?.status || 'todo'
+      const sb = state.outreach[b.id]?.status || 'todo'
+      return (rank[sa] ?? 1) - (rank[sb] ?? 1) || (b.fit_score - a.fit_score)
+    })
 }
 
 function filteredApplications() {
@@ -180,10 +191,17 @@ function filteredApplications() {
 function stats() {
   const all = state.jobs.length
   const top = state.jobs.filter((j) => j.fit_score >= 4).length
-  const applied = state.applications.filter((a) => a.status !== 'rejected').length
+  const fresh = state.jobs.filter((j) => (state.outreach[j.id]?.status || 'todo') === 'todo').length
+  const appliedJobs = state.jobs.filter((j) => (state.outreach[j.id]?.status || 'todo') === 'contacted').length
+  const rejectedJobs = state.jobs.filter((j) => state.outreach[j.id]?.status === 'rejected').length
+  const applied = state.applications.filter((a) => a.status === 'applied' || a.status === 'replied' || a.status === 'interview').length
   const rejected = state.applications.filter((a) => a.status === 'rejected').length
   const interviews = state.applications.filter((a) => a.status === 'interview').length
-  return { all, top, applied, rejected, interviews }
+  return { all, top, fresh, appliedJobs, rejectedJobs, applied, rejected, interviews }
+}
+
+function statusPill(kind, label) {
+  return `<span class="status-pill ${escapeHtml(kind)}">${escapeHtml(label)}</span>`
 }
 
 async function upsertApplicationFromJob(job, outreachStatus, note = '') {
@@ -350,7 +368,7 @@ function renderShell(inner) {
       <header class="topbar">
         <div>
           <h1>Role fit · Marta</h1>
-          <div class="meta">${s.all} ofert · ${s.applied} aplikacji · ${escapeHtml(state.session.user.email)}</div>
+          <div class="meta">${s.fresh} nowe · ${s.appliedJobs} zaaplikowane · ${escapeHtml(state.session.user.email)}</div>
         </div>
         <button class="secondary" id="logout">Wyloguj</button>
       </header>
@@ -376,11 +394,11 @@ function renderJobsTab() {
     .sort()
 
   return `
-    <div class="stats">
-      <span class="chip">Widoczne: ${rows.length}</span>
+      <div class="stats">
+      <span class="chip chip-new">Nowe: ${s.fresh}</span>
+      <span class="chip chip-applied">Zaaplikowane: ${s.appliedJobs}</span>
+      <span class="chip chip-rejected">Odrzucone: ${s.rejectedJobs}</span>
       <span class="chip">Top fit: ${s.top}</span>
-      <span class="chip">Aplikacje: ${s.applied}</span>
-      <span class="chip">Rozmowy: ${s.interviews}</span>
     </div>
 
     <div class="filters">
@@ -402,10 +420,11 @@ function renderJobsTab() {
     <div class="list">
       ${rows.map((j) => {
         const o = state.outreach[j.id] || { status: 'todo', comment: '' }
+        const st = o.status || 'todo'
         const saving = state.saving === j.id
         const open = state.openId === j.id
         return `
-          <article class="row status-${escapeHtml(o.status || 'todo')}" data-id="${j.id}">
+          <article class="row status-${escapeHtml(st)}" data-id="${j.id}">
             <div class="row-main">
               <div class="row-title">
                 <span class="fit-badge f${j.fit_score}">${j.fit_score}</span>
@@ -415,18 +434,20 @@ function renderJobsTab() {
                 </div>
               </div>
               <div class="row-side">
+                ${statusPill(st, STATUS_LABELS[st] || st)}
                 <a class="apply" href="${escapeHtml(j.url)}" target="_blank" rel="noopener">Oferta</a>
                 <span class="src">${escapeHtml(j.source || '')}</span>
               </div>
             </div>
             <p class="fit-line">${escapeHtml(j.fit_reason)}</p>
             <div class="quick">
-              <button type="button" class="quick-applied" ${saving ? 'disabled' : ''}>Zaaplikowałam</button>
-              <button type="button" class="secondary quick-rejected" ${saving ? 'disabled' : ''}>Odrzucone</button>
+              <button type="button" class="quick-applied" ${saving || st === 'contacted' ? 'disabled' : ''}>Zaaplikowałam</button>
+              <button type="button" class="secondary quick-rejected" ${saving || st === 'rejected' ? 'disabled' : ''}>Odrzucone</button>
+              ${st !== 'todo' ? `<button type="button" class="secondary quick-reset" ${saving ? 'disabled' : ''}>Reset → Nowe</button>` : ''}
             </div>
             <div class="row-actions">
               <select class="status-select" ${saving ? 'disabled' : ''}>
-                ${STATUS_OPTIONS.map(([v, l]) => `<option value="${v}" ${o.status === v ? 'selected' : ''}>${l}</option>`).join('')}
+                ${STATUS_OPTIONS.map(([v, l]) => `<option value="${v}" ${st === v ? 'selected' : ''}>${l}</option>`).join('')}
               </select>
               <input class="comment" placeholder="Notatka / email rekrutera..." value="${escapeHtml(o.comment || '')}" ${saving ? 'disabled' : ''} />
               <button class="save" ${saving ? 'disabled' : ''}>${saving ? '…' : 'Zapisz'}</button>
@@ -444,9 +465,9 @@ function renderAppsTab() {
   const rows = filteredApplications()
   return `
     <div class="stats">
+      <span class="chip chip-applied">Zaaplikowane: ${stats().applied}</span>
+      <span class="chip chip-rejected">Odrzucone: ${stats().rejected}</span>
       <span class="chip">Na liście: ${rows.length}</span>
-      <span class="chip">Aktywne: ${stats().applied}</span>
-      <span class="chip">Odrzucone: ${stats().rejected}</span>
     </div>
 
     <section class="panel">
@@ -508,7 +529,7 @@ function renderAppsTab() {
         const saving = state.saving === a.id
         const editing = state.editAppId === a.id
         return `
-          <article class="row status-${escapeHtml(a.status === 'applied' ? 'contacted' : a.status)}" data-app-id="${a.id}">
+          <article class="row status-${escapeHtml(a.status || 'applied')}" data-app-id="${a.id}">
             <div class="row-main">
               <div class="row-title">
                 <span class="fit-badge app">${a.job_id ? 'J' : 'M'}</span>
@@ -518,6 +539,7 @@ function renderAppsTab() {
                 </div>
               </div>
               <div class="row-side">
+                ${statusPill(a.status === 'applied' ? 'contacted' : a.status, APP_STATUS_LABELS[a.status] || a.status)}
                 <a class="apply" href="${escapeHtml(a.url)}" target="_blank" rel="noopener">Link</a>
               </div>
             </div>
@@ -646,6 +668,15 @@ function renderApp() {
         })
         state.tab = 'apps'
         renderApp()
+      }
+      const resetBtn = row.querySelector('.quick-reset')
+      if (resetBtn) {
+        resetBtn.onclick = async () => {
+          await upsertOutreach(id, {
+            status: 'todo',
+            comment: row.querySelector('.comment').value,
+          })
+        }
       }
       row.querySelector('.toggle').onclick = () => {
         state.openId = state.openId === id ? null : id

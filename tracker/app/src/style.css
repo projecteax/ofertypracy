@@ -244,17 +244,94 @@ button.secondary {
 
 .list { display: flex; flex-direction: column; gap: 8px; }
 
+.chip-new {
+  background: #fff4d6;
+  color: #8a6400;
+  border-color: #f0d78a;
+}
+
+.chip-applied {
+  background: #d9f0e8;
+  color: #0a4f44;
+  border-color: #9ec9be;
+}
+
+.chip-rejected {
+  background: #f8e4e1;
+  color: #8f3428;
+  border-color: #e5b3ab;
+}
+
 .row {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 12px 14px;
-  border-left: 3px solid var(--line);
+  border-left: 4px solid var(--line);
 }
 
-.row.status-contacted, .row.status-replied { border-left-color: #3d7ea6; }
-.row.status-interview, .row.status-hired { border-left-color: var(--accent); }
-.row.status-rejected, .row.status-skip { border-left-color: #b0b8c4; opacity: 0.88; }
+.row.status-todo {
+  background: #fffdf6;
+  border-color: #f0e2b8;
+  border-left-color: #e3b23c;
+}
+
+.row.status-contacted,
+.row.status-applied {
+  background: #f3faf7;
+  border-color: #b9d9cf;
+  border-left-color: #0e6b5c;
+}
+
+.row.status-replied,
+.row.status-interview,
+.row.status-hired {
+  background: #f3f7fb;
+  border-color: #b9cce0;
+  border-left-color: #2f6f9f;
+}
+
+.row.status-rejected,
+.row.status-skip {
+  background: #fbf5f4;
+  border-color: #e5c4be;
+  border-left-color: #c45b4a;
+  opacity: 0.92;
+}
+
+.status-pill {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  margin-bottom: 4px;
+}
+
+.status-pill.todo {
+  background: #ffe8a3;
+  color: #7a5800;
+}
+
+.status-pill.contacted,
+.status-pill.applied {
+  background: #bfe8da;
+  color: #0a4f44;
+}
+
+.status-pill.replied,
+.status-pill.interview,
+.status-pill.hired {
+  background: #c9ddf0;
+  color: #1f4f73;
+}
+
+.status-pill.rejected,
+.status-pill.skip {
+  background: #f0c4bc;
+  color: #7a2e24;
+}
 
 .row-main {
   display: flex;

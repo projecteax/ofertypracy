@@ -111,8 +111,96 @@ button.secondary {
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+}
+
+.tab {
+  background: transparent;
+  color: var(--soft);
+  border: 1px solid transparent;
+  padding: 7px 12px;
+  font-weight: 600;
+}
+
+.tab.active {
+  background: var(--wash);
+  color: var(--accent-deep);
+  border-color: #c5ddd6;
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.panel-title {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+}
+
+.add-form label {
+  margin-top: 8px;
+}
+
+.add-form button[type="submit"] {
+  margin-top: 8px;
+  width: 100%;
+}
+
+.grid-2, .grid-3 {
+  display: grid;
+  gap: 8px;
+}
+
+.grid-2 { grid-template-columns: 1fr 1fr; }
+.grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.apps-filters {
+  grid-template-columns: 1.6fr minmax(140px, 220px);
+}
+
+.quick {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.quick button {
+  padding: 6px 10px;
+  font-size: 0.82rem;
+}
+
+.app-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--soft);
+}
+
+.fit-badge.app {
+  background: #e7eef6;
+  color: #2f567a;
+  font-size: 0.7rem;
+}
+
+.row-actions.app-wide,
+.row[data-app-id] .row-actions {
+  grid-template-columns: 140px 1fr 1fr auto auto;
+}
+
 
 .stats {
   display: flex;
@@ -256,8 +344,12 @@ button.secondary {
 
 @media (max-width: 760px) {
   .filters { grid-template-columns: 1fr 1fr; }
+  .apps-filters { grid-template-columns: 1fr; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
   .row-main { flex-direction: column; }
   .row-side { align-items: flex-start; }
   .row-actions { grid-template-columns: 1fr 1fr; }
-  .row-actions .comment { grid-column: 1 / -1; }
+  .row-actions .comment,
+  .row-actions .contact { grid-column: 1 / -1; }
+  .row[data-app-id] .row-actions { grid-template-columns: 1fr 1fr; }
 }
